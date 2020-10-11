@@ -1,42 +1,44 @@
 package main
 
 import (
-	"github.com/open-policy-agent/opa/rego"
-    "fmt"
-    "io/ioutil"
-)
+	"context"
+	"encoding/json"
+	"fmt"
+	"log"
+	"os"
 
-func check(e error) {
-    if e != nil {
-        panic(e)
-    }
-}
+	"github.com/open-policy-agent/opa/rego"
+)
 
 func main() {
 
-    module := readFile("module")
-    query := "x = data.example.authz.allow"
+	ctx := context.Background()
 
-    err := queryGen(query, module)
-    check(err)
-    
-}
+	// Construct a Rego object that can be prepared or evaluated.
+	r := rego.New(
+		rego.Query(os.Args[2]),
+		rego.Load([]string{os.Args[1]}, nil))
 
-func readFile(filename string)  string {
-    dat, err := ioutil.ReadFile(filename)
-    check(err)
-    return string(dat)
-}
+	// Create a prepared query that can be evaluated.
+	query, err := r.PrepareForEval(ctx)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-func queryGen(query string, module string) error{
-    query, err := rego.New(
-        rego.Query(query),
-        rego.Module("test.rego".module),
-    ).PrepareForEval(ctx)
+	// Load the input document from stdin.
+	var input interface{}
+	dec := json.NewDecoder(os.Stdin)
+	dec.UseNumber()
+	if err := dec.Decode(&input); err != nil {
+		log.Fatal(err)
+	}
 
-    if err!= nil {
-        return err
-    }
+	// Execute the prepared query.
+	rs, err := query.Eval(ctx, rego.EvalInput(input))
+	if err != nil {
+		log.Fatal(err)
+	}
 
-    return nil
+    // Do something with the result.
+	fmt.Println(rs)
 }

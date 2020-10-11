@@ -1,0 +1,15 @@
+{
+    "method":["GET","POST"],
+    "path": "/iron-maiden/powerslave/docs",
+    "users": [
+        "Martin Birch",
+        "Frank Gibson",
+        "Bruce Buchhalter",
+        "George Marino",
+        "Rod Smallwood",
+        "Andy Taylor"
+    ]
+}
+
+
+

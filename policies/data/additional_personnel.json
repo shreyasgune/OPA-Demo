@@ -1,0 +1,9 @@
+{
+    "method":["GET","POST"],
+    "path": "/iron-maiden/powerslave/assets",
+    "users": [
+        "Ross Halfin",
+        "Derek Riggs",
+        "Moshe Brakha"
+    ]
+}
