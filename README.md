@@ -147,6 +147,14 @@ curl -X POST http://localhost:8181/v1/data/powerslave/policy/allow \
 ```
 
 
+## [Conftest](https://www.conftest.dev/install/)
+```
+$ docker run --rm -v $(pwd):/project openpolicyagent/conftest test <config-file>
+FAIL - <config-file> - Containers must not run as root
+
+1 test, 0 passed, 0 warnings, 1 failure, 0 exceptions
+```
+
 
 
 
